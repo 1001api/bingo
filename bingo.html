@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BINGO - Number Grid Game</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="bingo.css">
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="e9e6a268-6f90-4673-b312-38034bf48525"></script>
+</head>
+
+<body>
+
+  <div style="margin-top: 12px; display: flex; flex-direction: column; align-items: center;">
+    <h1>BINGO</h1>
+    <p class="subtitle">Number Grid Game</p>
+  </div>
+
+  <!-- Live region for screen reader announcements -->
+  <div id="announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ======== PHASE 1: WORD SETUP ======== -->
+  <div id="phase-words" class="phase active" role="region" aria-label="Word setup">
+    <div class="word-setup">
+      <h2>Set Your 5 Words</h2>
+      <p class="hint">Type a word in each box — it auto-jumps to the next when filled. Press <kbd>Backspace</kbd> on
+        empty to go back.</p>
+      <div class="word-inputs" id="word-inputs"></div>
+      <div class="btn-row" style="margin-bottom: 16px;">
+        <button class="btn btn-primary" id="btn-words-next" disabled onclick="goToGridPhase()">Next → Grid
+          Setup</button>
+      </div>
+      <p class="shortcut-hint" style="margin-top: 12px;"><kbd>Tab</kbd> / <kbd>Enter</kbd> next · <kbd>Backspace</kbd>
+        on empty = go back ·
+        <kbd>Ctrl+Enter</kbd> proceed
+      </p>
+    </div>
+  </div>
+
+  <!-- ======== PHASE 2: GRID SETUP ======== -->
+  <div id="phase-grid" class="phase" role="region" aria-label="Grid setup">
+    <div class="grid-setup">
+      <h2>Place Your Numbers</h2>
+      <p class="hint">Click a cell to place the current number. Numbers go from 1 → 25.</p>
+      <div class="grid-progress" id="grid-progress">
+        <div>Placing: <span class="current-number" id="current-num">1</span></div>
+        <div class="progress-label" id="progress-label">0 / 25</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="grid-container" id="grid-inputs" role="grid" aria-label="Number grid placement"></div>
+      <div class="btn-row" style="margin: 24px 0;">
+        <button class="btn btn-secondary" onclick="goToWordPhase()">← Back</button>
+        <button class="btn btn-secondary" id="btn-grid-undo" onclick="undoGridPlace()" disabled>↩ Undo</button>
+        <button class="btn btn-secondary" onclick="randomizeGrid()">🎲 Randomize</button>
+        <button class="btn btn-secondary" onclick="clearGrid()">✕ Clear</button>
+        <button class="btn btn-primary" id="btn-grid-next" disabled onclick="startGame()">Start Game!</button>
+      </div>
+      <p class="shortcut-hint"><kbd>Click</kbd> place number · <kbd>Ctrl+Z</kbd> undo · <kbd>R</kbd> randomize ·
+        <kbd>Ctrl+Enter</kbd> start
+      </p>
+      <p id="grid-error"
+        style="color:var(--accent);font-size:0.8rem;margin-top:8px;text-align:center;min-height:1.2em;"></p>
+    </div>
+  </div>
+
+  <!-- ======== PHASE 3: GAMEPLAY ======== -->
+  <div id="phase-game" class="phase" role="region" aria-label="Game board">
+    <div class="game-layout">
+      <div class="words-display" id="words-display" aria-label="Word progress"></div>
+      <div class="game-grid-wrapper" id="game-grid-wrapper">
+        <div class="game-grid" id="game-grid" role="grid" aria-label="Bingo game grid">
+          <svg class="line-overlay" id="line-overlay" aria-hidden="true"></svg>
+        </div>
+      </div>
+      <div class="lines-tracker" id="lines-tracker"></div>
+      <div class="undo-bar">
+        <button id="btn-undo" onclick="undoMark()" disabled aria-label="Undo last mark">↩ Undo</button>
+        <span id="mark-count">0 marked</span>
+      </div>
+      <div class="game-status" id="game-status">Click a number to mark it</div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="resetGame()">New Game</button>
+      </div>
+      <p class="shortcut-hint"><kbd>1-9</kbd> then <kbd>Enter</kbd> to type number · <kbd>Ctrl+Z</kbd> undo · <kbd>Arrow
+          keys</kbd> navigate grid</p>
+    </div>
+  </div>
+
+  <!-- WIN OVERLAY -->
+  <div class="win-overlay" id="win-overlay" role="dialog" aria-label="You win!">
+    <h2>🎉 YOU WIN! 🎉</h2>
+    <p id="win-message">All words completed!</p>
+    <button class="btn btn-primary" onclick="closeWin()">Play Again</button>
+  </div>
+
+  <script src="bingo.js"></script>
+
+</body>
+
+</html>
