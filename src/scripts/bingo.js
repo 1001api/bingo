@@ -40,7 +40,7 @@ function announce(msg) {
   container.addEventListener('input', (e) => {
     const input = e.target;
     const idx = parseInt(input.id.split('-')[1]);
-    
+
     // Force uppercase
     input.value = input.value.toUpperCase();
     const val = input.value.trim();
@@ -614,4 +614,22 @@ window.addEventListener('resize', () => {
   if (gameActive || completedLines.size > 0) {
     redrawAllLines();
   }
+});
+
+// ============ EVENT LISTENERS ============
+document.addEventListener('DOMContentLoaded', () => {
+  const attachListener = (id, handler) => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('click', handler);
+  };
+
+  attachListener('btn-words-next', goToGridPhase);
+  attachListener('btn-grid-back', goToWordPhase);
+  attachListener('btn-grid-undo', undoGridPlace);
+  attachListener('btn-grid-randomize', randomizeGrid);
+  attachListener('btn-grid-clear', clearGrid);
+  attachListener('btn-grid-next', startGame);
+  attachListener('btn-undo', undoMark);
+  attachListener('btn-new-game', resetGame);
+  attachListener('btn-play-again', closeWin);
 });
